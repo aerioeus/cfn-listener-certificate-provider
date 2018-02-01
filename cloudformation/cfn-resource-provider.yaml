@@ -42,7 +42,7 @@ Resources:
       Description: CFN Listener Certificate Provider
       Code:
         S3Bucket: !Sub '${S3BucketPrefix}-${AWS::Region}'
-        S3Key: lambdas/cfn-listener-certificate-provider-0.6.3.zip
+        S3Key: lambdas/cfn-listener-certificate-provider-0.6.4.zip
       FunctionName: binxio-cfn-listener-certificate-provider
       Handler: provider.handler
       MemorySize: 128
