@@ -15,6 +15,12 @@ Resources:
         Version: '2012-10-17'
         Statement:
           - Action:
+              - elasticloadbalancing:AddListenerCertificates
+              - elasticloadbalancing:RemoveListenerCertificates
+            Resource: *
+            Effect: Allow
+        Statement:
+          - Action:
               - logs:*
             Resource: arn:aws:logs:*:*:*
             Effect: Allow
