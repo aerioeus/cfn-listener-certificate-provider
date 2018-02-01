@@ -63,8 +63,10 @@ class ListenerCertificateProvider(ResourceProvider):
             (listener_arn, certificate_arn) = self.physical_resource_id.split(' ', 2)
             certificates=[{'CertificateArn': certificate_arn}]
             response = self.elbv2.remove_listener_certificates(ListenerArn=listener_arn, Certificates=certificates)
-        except self.elbv2.exceptions.NoSuchEntity as e:
-            self.success('already deleted')
+        except self.elbv2.exceptions.ListenerNotFoundException as e:
+            self.success('listener already deleted')
+        except self.elbv2.exceptions.CertificateNotFoundException as e:
+            self.success('certificate already deleted')
         except ClientError as e:
             self.fail(e.message)
 
