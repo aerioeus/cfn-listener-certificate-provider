@@ -47,10 +47,4 @@ Resources:
       Handler: provider.handler
       MemorySize: 128
       Role: !GetAtt 'LambdaRole.Arn'
-      VpcConfig: !If
-        - DoNotAttachToVpc
-        - !Ref 'AWS::NoValue'
-        - SecurityGroupIds:
-            - !Ref 'DefaultSecurityGroup'
-          SubnetIds: !Ref 'PrivateSubnets'
       Runtime: python2.7

@@ -60,9 +60,13 @@ class ListenerCertificateProvider(ResourceProvider):
             return
 
         try:
-            (listener_arn, certificate_arn) = self.physical_resource_id.split(' ', 2)
-            certificates=[{'CertificateArn': certificate_arn}]
-            response = self.elbv2.remove_listener_certificates(ListenerArn=listener_arn, Certificates=certificates)
+            parts = self.physical_resource_id.split(' ')
+            if len(parts) == 2:
+                (listener_arn, certificate_arn) = self.physical_resource_id.split(' ')
+                certificates=[{'CertificateArn': certificate_arn}]
+                response = self.elbv2.remove_listener_certificates(ListenerArn=listener_arn, Certificates=certificates)
+            else:
+                self.success('invalid physical resource id "{}"'.format(self.physical_resource_id))
         except self.elbv2.exceptions.ListenerNotFoundException as e:
             self.success('listener already deleted')
         except self.elbv2.exceptions.CertificateNotFoundException as e:
