@@ -1,45 +1,19 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Custom CloudFormation Provider
 Parameters:
-  AppVPC:
-    Type: String
-    Default: ''
-  PrivateSubnets:
-    Type: CommaDelimitedList
-    Default: ''
-  DefaultSecurityGroup:
-    Type: String
-    Default: ''
   S3BucketPrefix:
     Type: String
-    Default: ''
-  CFNCustomProviderZipFileName:
-    Type: String
-    Default: lambdas/cfn-listener-certificate-provider-0.6.1.zip
-Conditions:
-  DoNotAttachToVpc: !Equals
-    - !Ref 'AppVPC'
-    - ''
+    Default: 'binxio-public'
 Resources:
   LambdaPolicy:
     Type: AWS::IAM::Policy
     DependsOn:
       - LambdaRole
     Properties:
-      PolicyName: CFNCustomProviderPolicy
+      PolicyName: CFNListenerCertificateProviderPolicy
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Effect: Allow
-            Action:
-              - ssm:GetParameter
-            Resource:
-              - '*'
-          - Effect: Allow
-            Action:
-              - kms:Encrypt
-            Resource:
-              - '*'
           - Action:
               - logs:*
             Resource: arn:aws:logs:*:*:*
@@ -65,11 +39,11 @@ Resources:
     DependsOn:
       - LambdaRole
     Properties:
-      Description: Custom CloudFormation Provider implementation
+      Description: CFN Listener Certificate Provider
       Code:
         S3Bucket: !Sub '${S3BucketPrefix}-${AWS::Region}'
-        S3Key: !Ref 'CFNCustomProviderZipFileName'
-      FunctionName: cfn-custom-provider
+        S3Key: lambdas/cfn-listener-certificate-provider-0.6.1.zip
+      FunctionName: binxio-cfn-listener-certificate-provider
       Handler: provider.handler
       MemorySize: 128
       Role: !GetAtt 'LambdaRole.Arn'

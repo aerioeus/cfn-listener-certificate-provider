@@ -1,12 +1,14 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Custom Provider CloudFormation
+Description: Custom Listener Certificate Provider CloudFormation
+Parameters:
+  ListenerArn:
+    Type: String
+  CertificateArn:
+    Type: String
 Resources:
   Custom:
-    Type: Custom::Custom
+    Type: Custom::ListenerCertificate
     Properties:
-      Value: bye bye World!
-      ServiceToken: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:cfn-custom-provider'
-Outputs:
-  Value:
-    Description: The value returned by the Custom::Custom resource
-    Value: !GetAtt 'Custom.Value'
+      ListenerArn: !Ref ListenerArn
+      CertificateArn: !Ref CertificateArn
+      ServiceToken: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:binxio-cfn-listener-certificate-provider'
