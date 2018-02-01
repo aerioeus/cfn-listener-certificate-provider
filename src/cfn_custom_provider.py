@@ -45,7 +45,7 @@ class ListenerCertificateProvider(ResourceProvider):
             response = self.elbv2.add_listener_certificates(Certificates=certificates, ListenerArn=self.listener_arn)
             self.physical_resource_id = "{} {}".format(self.listener_arn, self.certificate_arn)
         except ClientError as e:
-            self.fail(e.message)
+            self.fail(e['Error']['Message'])
             if self.request_type == 'Create':
                 self.physical_resource_id = 'failed-to-create'
 
@@ -68,7 +68,7 @@ class ListenerCertificateProvider(ResourceProvider):
         except self.elbv2.exceptions.CertificateNotFoundException as e:
             self.success('certificate already deleted')
         except ClientError as e:
-            self.fail(e.message)
+            self.fail(e['Error']['Message'])
 
 
 provider = ListenerCertificateProvider()
