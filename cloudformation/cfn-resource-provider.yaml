@@ -1,3 +1,4 @@
+---
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Custom CloudFormation Provider
 Parameters:
@@ -14,16 +15,17 @@ Resources:
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Action:
+          - Effect: Allow
+            Action:
               - elasticloadbalancing:AddListenerCertificates
               - elasticloadbalancing:RemoveListenerCertificates
-            Resource: *
-            Effect: Allow
-        Statement:
-          - Action:
+            Resource:
+              - '*'
+          - Effect: Allow
+            Action:
               - logs:*
-            Resource: arn:aws:logs:*:*:*
-            Effect: Allow
+            Resource:
+              - arn:aws:logs:*:*:*
       Roles:
         - !Ref 'LambdaRole'
   LambdaRole:
